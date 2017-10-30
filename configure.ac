@@ -35,6 +35,22 @@ AC_PROG_LIBTOOL
 
 gl_CONFIGMAKE_PREP
 
+android_compile=no
+AC_MSG_CHECKING([check for android])
+
+	case "${host}" in
+		*android*)
+			android_compile=yes
+		;;
+	esac
+
+AC_MSG_RESULT(${android_compile})
+AM_CONDITIONAL([ANDROID], test "${android_compile}" = "yes")
+
+if (test "${android_compile}" = "yes"); then
+	AC_DEFINE([ANDROID_COMPILE], 1, [android environment compilation])
+fi
+
 AC_ARG_ENABLE(optimization, AC_HELP_STRING([--disable-optimization],
 			[disable code optimization through compiler]), [
 	if (test "${enableval}" = "no"); then
