@@ -18,6 +18,10 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -35,6 +39,21 @@
 #include <glib.h>
 #include "ipv4ll.h"
 #include "common.h"
+
+#ifdef ANDROID_COMPILE
+struct ether_arp {
+	struct   arphdr ea_hdr;                 /* fixed-size header */
+	u_int8_t arp_sha[ETHER_ADDR_LEN];       /* sender hardware address */
+	u_int8_t arp_spa[4];                    /* sender protocol address */
+	u_int8_t arp_tha[ETHER_ADDR_LEN];       /* target hardware address */
+	u_int8_t arp_tpa[4];                    /* target protocol address */
+} __packed;
+#define        arp_hrd ea_hdr.ar_hrd
+#define        arp_pro ea_hdr.ar_pro
+#define        arp_hln ea_hdr.ar_hln
+#define        arp_pln ea_hdr.ar_pln
+#define        arp_op  ea_hdr.ar_op
+#endif
 
 /**
  * Return a random link local IP (in host byte order)
