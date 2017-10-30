@@ -43,6 +43,10 @@ else
 gweb_sources += gweb/giognutls.h gweb/gionotls.c
 endif
 
+if ANDROID
+gweb_sources += gweb/ns_parse.c
+endif
+
 if BACKTRACE
 backtrace_sources = src/backtrace.c
 endif
