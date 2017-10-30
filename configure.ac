@@ -193,10 +193,13 @@ AM_CONDITIONAL(PPTP_BUILTIN, test "${enable_pptp}" = "builtin")
 
 AC_CHECK_HEADERS(resolv.h, dummy=yes,
 	AC_MSG_ERROR(resolver header files are required))
-AC_CHECK_LIB(resolv, ns_initparse, dummy=yes, [
-	AC_CHECK_LIB(resolv, __ns_initparse, dummy=yes,
-		AC_MSG_ERROR(resolver library support is required))
+
+if (test "${android_compile}" = "no"); then
+	AC_CHECK_LIB(resolv, ns_initparse, dummy=yes, [
+		AC_CHECK_LIB(resolv, __ns_initparse, dummy=yes,
+			AC_MSG_ERROR(resolver library support is required))
 ])
+fi
 
 AC_CHECK_HEADERS([execinfo.h])
 AM_CONDITIONAL([BACKTRACE], [test "${ac_cv_header_execinfo_h}" = "yes"])
