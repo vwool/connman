@@ -32,6 +32,9 @@
 #include <sys/stat.h>
 #include <resolv.h>
 #include <netdb.h>
+#ifdef ANDROID_COMPILE
+#include <resolv_params.h>
+#endif
 
 #include "connman.h"
 
