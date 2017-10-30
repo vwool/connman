@@ -130,9 +130,11 @@ src_connmand_SOURCES = $(gdhcp_sources) $(gweb_sources) $(backtrace_sources) \
 			src/peer_service.c src/machine.c src/util.c
 
 src_connmand_LDADD = gdbus/libgdbus-internal.la $(builtin_libadd) \
-			@GLIB_LIBS@ @DBUS_LIBS@ @GNUTLS_LIBS@ \
-			-lresolv -ldl -lrt
-
+			@GLIB_LIBS@ @DBUS_LIBS@ @XTABLES_LIBS@ @GNUTLS_LIBS@ \
+			-ldl
+if !ANDROID
+src_connmand_LDADD += -lresolv -lrt
+endif
 src_connmand_LDFLAGS = -Wl,--export-dynamic \
 				-Wl,--version-script=$(srcdir)/src/connman.ver
 
