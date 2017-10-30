@@ -38,6 +38,11 @@
 
 #include "gresolv.h"
 
+#ifdef ANDROID_COMPILE
+#include <resolv_private.h>
+#include <res_private.h>
+#endif
+
 struct sort_result {
 	int precedence;
 	int src_scope;
@@ -1026,9 +1031,19 @@ guint g_resolv_lookup_hostname(GResolv *resolv, const char *hostname,
 			void *sa_addr = &resolv->res.nsaddr_list[i].sin_addr;
 
 			if (family != AF_INET &&
-					resolv->res._u._ext.nsaddrs[i]) {
+#ifdef ANDROID_COMPILE
+				&resolv->res._u._ext.ext->nsaddrs[i].sin6
+#else
+				resolv->res._u._ext.nsaddrs[i]
+#endif
+			   )
+			{
 				family = AF_INET6;
+#ifdef ANDROID_COMPILE
+				sa_addr = &resolv->res._u._ext.ext->nsaddrs[i].sin6;
+#else
 				sa_addr = &resolv->res._u._ext.nsaddrs[i]->sin6_addr;
+#endif
 			}
 
 			if (family != AF_INET && family != AF_INET6)
